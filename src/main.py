@@ -11,7 +11,7 @@ from loading.load_csv import load_csv
 from loading.load_json import load_json
 from transforming.merge import link_dfs, merge_on_substring
 from exporting.save import save
-from analytics.top_journal import get_best_journal
+from analytics.top_journal import get_best_journal, find_related_drugs
 
 # from transformation import merge_data
 from utils.logger import logger
@@ -105,6 +105,8 @@ def main():
         adhoc_df = load_json(
             "./data/export/result.json",
         )
+        adhoc_df = adhoc_df[~adhoc_df['title'].isin(['none']) & adhoc_df['title'].notna()]
+        print(find_related_drugs(adhoc_df, 'TETRACYCLINE'))
 
         logger.info("Pipeline ended successfuly")
 

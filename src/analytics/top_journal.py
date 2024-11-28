@@ -35,18 +35,15 @@ def get_best_journal(df, group_column, drug_column):
     return most_distinct_drug_titles
 
 
-def find_related_drugs(target_drug):
-    # Trouver les journaux qui mentionnent le médicament donné
-    related_journals = {
-        journal for journal, drugs in journals.items() if target_drug in drugs
-    }
+def find_related_drugs(df, target_drug):
+    """
+    Fonction pour filtrer le DataFrame par le nom du médicament
+    """
 
-    # Recueillir tous les médicaments mentionnés par ces journaux
-    related_drugs = set()
-    for journal in related_journals:
-        related_drugs.update(journals[journal])
+    # Filter on target drug
+    filtered_df = df[df['drug'] == target_drug]
+    
+    # Get related drugs based on the same journals mentionning the target drug
+    related_drugs_df = df[df['journal'].isin(filtered_df['journal'])]
 
-    # Retirer le médicament cible de la liste (si on ne veut pas l'inclure)
-    related_drugs.discard(target_drug)
-
-    return related_drugs
+    return related_drugs_df
